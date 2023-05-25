@@ -1,0 +1,28 @@
+SKU: 5
+Naziv: Cannon
+Stanje: 1
+
+SKU: 10
+Naziv: Nikon
+Stanje: 4
+
+SKU: 3
+Naziv: Sigma
+Stanje: 5
+
+SKU: 15
+Naziv: Neznam
+Stanje: 2
+
+SKU: 28
+Naziv: Flash
+Stanje: 15
+
+SKU: 36
+Naziv: 28-70
+Stanje: 12
+
+SKU: 15
+Naziv: 15
+Stanje: 15
+
