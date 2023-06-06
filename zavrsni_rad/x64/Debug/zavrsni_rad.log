@@ -1,1 +1,5 @@
-﻿  zavrsni_rad.vcxproj -> C:\Users\student\Desktop\zavrsni_rad\zavrsni_rad\x64\Debug\zavrsni_rad.exe
+﻿  proizvodi.c
+C:\Users\student\Desktop\zavrsni_rad\zavrsni_rad\proizvodi.c(65,10): warning C4566: character represented by universal-character-name '\u0107' cannot be represented in the current code page (1252)
+C:\Users\student\Desktop\zavrsni_rad\zavrsni_rad\proizvodi.c(177,16): warning C4566: character represented by universal-character-name '\u0111' cannot be represented in the current code page (1252)
+C:\Users\student\Desktop\zavrsni_rad\zavrsni_rad\proizvodi.c(214,20): warning C4566: character represented by universal-character-name '\u0107' cannot be represented in the current code page (1252)
+  zavrsni_rad.vcxproj -> C:\Users\student\Desktop\zavrsni_rad\zavrsni_rad\x64\Debug\zavrsni_rad.exe

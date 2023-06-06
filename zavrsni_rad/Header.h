@@ -3,13 +3,12 @@
 #define HEADER_H
 
 #define MAX_PROIZVODA 200
-#define FILENAME "proizvodi.txt"
+#define FILENAME "proizvodi.bin"
 
 typedef struct Proizvod{
     int sku;
     char naziv[50];
     int stanje;
-
 }PROIZVOD;
 
 typedef struct Narudzba{
@@ -29,5 +28,6 @@ void sortiraj_proizvode();
 void sortiraj_po_imenu();
 void sortiraj_po_sku();
 void pocetni_izbornik();
+int azuriraj_datoteku();
 
 #endif

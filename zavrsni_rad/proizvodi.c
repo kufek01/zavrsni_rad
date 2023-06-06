@@ -1,7 +1,7 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
 #include "header.h"
 
 struct Proizvod proizvodi[MAX_PROIZVODA];
@@ -56,28 +56,30 @@ void ispis_izbornika_kupac() {
 }
 
 void pregled_proizvoda() {
-    printf("\nPopis proizvoda:\n");
-    printf("SKU  \tNaziv  \tStanje  \n");
+	printf("\nPopis proizvoda:\n");
+	printf("SKU  \tNaziv  \tStanje  \n");
+
 
 	FILE* datoteka = fopen("popis_proizvoda.bin", "rb");
-    if (datoteka == NULL) {
-        printf("Nije moguce otvoriti datoteku.");
-        return;
-    }
+	if (datoteka == NULL) {
+		printf("Nije moguće otvoriti datoteku.");
+		return;
+	}
 
-    struct Proizvod ucitani_proizvod;
-    while (fscanf(datoteka, "SKU: %d", &ucitani_proizvod.sku) == 1) {
-        fscanf(datoteka, "\nNaziv: %[^\n]", ucitani_proizvod.naziv);
-        fscanf(datoteka, "\nStanje: %d", &ucitani_proizvod.stanje);
-        fscanf(datoteka, "\n");
+	struct Proizvod ucitani_proizvod;
+	int broj_ucitanih_proizvoda = 0;
 
-        printf("%d\t%s\t%d\n", ucitani_proizvod.sku, ucitani_proizvod.naziv, ucitani_proizvod.stanje);
-    }
+	while (fread(&ucitani_proizvod, sizeof(struct Proizvod), 1, datoteka) == 1) {
+		printf("%d\t%s\t%d\n", ucitani_proizvod.sku, ucitani_proizvod.naziv, ucitani_proizvod.stanje);
+		broj_ucitanih_proizvoda++;
+	}
 
-    fclose(datoteka);
-	
-	sortiraj_po_sku();
+	fclose(datoteka);
 
+	if (broj_ucitanih_proizvoda == 0) {
+		printf("Nema dostupnih proizvoda.\n");
+		return;
+	}
 }
 
 struct Proizvod proizvodi[MAX_PROIZVODA];
@@ -231,28 +233,32 @@ void nova_narudzba() {
 }
 
 void sortiraj_proizvode() {
-    int odabir;
-    printf("\nSortiranje proizvoda:\n");
-    printf("-----------------------------\n");
-    printf("1. Sortiraj po imenu\n");
-    printf("2. Sortiraj po SKU\n");
-    printf("-----------------------------\n");
-    printf("Odabir: ");
-    scanf("%d", &odabir);
+	int odabir;
+	printf("\nSortiranje proizvoda:\n");
+	printf("-----------------------------\n");
+	printf("1. Sortiraj po imenu\n");
+	printf("2. Sortiraj po SKU\n");
+	printf("-----------------------------\n");
+	printf("Odabir: ");
+	scanf("%d", &odabir);
 
-    switch (odabir) {
-    case 1:
-        sortiraj_po_imenu();
-        break;
-    case 2:
-        sortiraj_po_sku();
-        break;
-    default:
-        printf("Neispravan odabir.\n");
-        return;
-    }
+	switch (odabir) {
+	case 1:
+		sortiraj_po_imenu();
+		break;
+	case 2:
+		sortiraj_po_sku();
+		break;
+	default:
+		printf("Neispravan odabir.\n");
+		return;
+	}
 
-    printf("Proizvodi uspjesno sortirani.\n");
+	printf("Proizvodi uspješno sortirani.\n");
+
+	if (azuriraj_datoteku() != 0) {
+		printf("Pogreška pri ažuriranju datoteke.\n");
+	}
 }
 
 void sortiraj_po_imenu() {
@@ -279,4 +285,15 @@ void sortiraj_po_sku() {
 	}
 }
 
+int azuriraj_datoteku() {
+	FILE* datoteka = fopen("popis_proizvoda.bin", "wb");
+	if (datoteka == NULL) {
+		return -1; 
+	}
+
+	fwrite(proizvodi, sizeof(struct Proizvod), broj_proizvoda, datoteka);
+
+	fclose(datoteka);
+	return 0;
+}
 
