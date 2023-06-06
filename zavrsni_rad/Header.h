@@ -5,17 +5,18 @@
 #define MAX_PROIZVODA 200
 #define FILENAME "proizvodi.txt"
 
-struct Proizvod {
+typedef struct Proizvod{
     int sku;
     char naziv[50];
     int stanje;
-};
 
-struct Narudzba {
+}PROIZVOD;
+
+typedef struct Narudzba{
     int sku;
     char naziv[50];
     int kolicina;
-};
+}NARUDZBA;
 
 void ispis_izbornika_vlasnik();
 void ispis_izbornika_kupac();
@@ -25,7 +26,8 @@ void ucitaj_iz_datoteke();
 void izmjena_stanja();
 void nova_narudzba();
 void sortiraj_proizvode();
-void usporedi_po_imenu();
-void usporedi_po_sku();
+void sortiraj_po_imenu();
+void sortiraj_po_sku();
+void pocetni_izbornik();
 
 #endif

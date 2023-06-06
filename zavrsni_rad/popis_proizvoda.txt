@@ -26,3 +26,11 @@ SKU: 15
 Naziv: 15
 Stanje: 15
 
+SKU: 150
+Naziv: Dobarden
+Stanje: 10
+
+SKU: 69
+Naziv: Neznam
+Stanje: 10
+

@@ -7,6 +7,18 @@
 struct Proizvod proizvodi[MAX_PROIZVODA];
 int broj_proizvoda = 0;
 
+void pocetni_izbornik() {
+	printf("Dobrodosli u webshop Kadar!\n");
+	printf("-----------------------------\n");
+	printf("Unesite svoju ulogu:\n");
+	printf("-----------------------------\n");
+	printf("1. Vlasnik\n");
+	printf("-----------------------------\n");
+	printf("2. Kupac\n");
+	printf("-----------------------------\n");
+	printf("Odaberite vasu ulogu: ");
+}
+
 void ispis_izbornika_vlasnik() {
     printf("\nTrgovinu pregledavate kao Vlasnik:\n");
     printf("-----------------------------\n");
@@ -45,11 +57,11 @@ void ispis_izbornika_kupac() {
 
 void pregled_proizvoda() {
     printf("\nPopis proizvoda:\n");
-    printf("SKU     \tNaziv       \tStanje  \n");
+    printf("SKU  \tNaziv  \tStanje  \n");
 
-    FILE* datoteka = fopen("popis_proizvoda.txt", "r");
+	FILE* datoteka = fopen("popis_proizvoda.bin", "rb");
     if (datoteka == NULL) {
-        printf("Nije moguće otvoriti datoteku.");
+        printf("Nije moguce otvoriti datoteku.");
         return;
     }
 
@@ -63,6 +75,9 @@ void pregled_proizvoda() {
     }
 
     fclose(datoteka);
+	
+	sortiraj_po_sku();
+
 }
 
 struct Proizvod proizvodi[MAX_PROIZVODA];
@@ -85,9 +100,9 @@ void dodaj_proizvod() {
     proizvodi[broj_proizvoda] = novi_proizvod;
     broj_proizvoda++;
 
-    FILE* datoteka = fopen("popis_proizvoda.txt", "a");
+	FILE* datoteka = fopen("popis_proizvoda.bin", "ab");
     if (datoteka == NULL) {
-        printf("Nije moguće otvoriti datoteku.");
+        printf("Nije moguce otvoriti datoteku.");
         return;
     }
 
@@ -96,14 +111,14 @@ void dodaj_proizvod() {
     fprintf(datoteka, "Stanje: %d\n\n", novi_proizvod.stanje);
 
     fclose(datoteka);
-    printf("Proizvod uspješno dodan.\n");
+    printf("Proizvod uspjesno dodan.\n");
 }
 
 
 void ucitaj_iz_datoteke() {
-        FILE* datoteka = fopen("popis_proizvoda.txt", "r");
+        FILE* datoteka = fopen("popis_proizvoda.bin", "rb");
         if (datoteka == NULL) {
-            printf("Nije moguće otvoriti datoteku.\n");
+            printf("Nije moguce otvoriti datoteku.\n");
             return;
         }
 
@@ -139,9 +154,9 @@ void izmjena_stanja() {
     }
 
     if (pronaden) {
-        FILE* datoteka = fopen("popis_proizvoda.txt", "w");
+		FILE* datoteka = fopen("popis_proizvoda.bin", "wb");
         if (datoteka == NULL) {
-            printf("Nije moguće otvoriti datoteku.");
+            printf("Nije moguce otvoriti datoteku.");
             return;
         }
 
@@ -154,7 +169,7 @@ void izmjena_stanja() {
 
         fclose(datoteka);
 
-        printf("Stanje proizvoda uspješno izmijenjeno.\n");
+        printf("Stanje proizvoda uspjesno izmijenjeno.\n");
     }
     else {
         printf("Proizvod sa SKU-om %d nije pronađen.\n", sku);
@@ -180,7 +195,10 @@ void nova_narudzba() {
                 pronaden = 1;
                 break;
             }
+
+			
             else {
+				system("cls");
                 printf("Nedovoljna kolicina proizvoda na stanju.\n");
                 return;
             }
@@ -188,8 +206,9 @@ void nova_narudzba() {
     }
 
     if (pronaden) {
-        FILE* datoteka = fopen("popis_proizvoda.txt", "w");
+		FILE* datoteka = fopen("popis_proizvoda.bin", "wb");
         if (datoteka == NULL) {
+			system("cls");
             printf("Nije moguće otvoriti datoteku.");
             return;
         }
@@ -201,6 +220,7 @@ void nova_narudzba() {
         }
 
         fclose(datoteka);
+		system("cls");
         printf("--------------------------------CESTITAMO--------------------------\n");
         printf("Narudzba uspjesno kreirana. Hvala vam sto koristite Kadar trgovinu.\n");
         printf("-------------------------------------------------------------------\n");
@@ -222,10 +242,10 @@ void sortiraj_proizvode() {
 
     switch (odabir) {
     case 1:
-        usporedi_po_imenu();
+        sortiraj_po_imenu();
         break;
     case 2:
-        usporedi_po_sku();
+        sortiraj_po_sku();
         break;
     default:
         printf("Neispravan odabir.\n");
@@ -235,16 +255,28 @@ void sortiraj_proizvode() {
     printf("Proizvodi uspjesno sortirani.\n");
 }
 
-void usporedi_po_imenu(const void* a, const void* b) {
-    const struct Proizvod* proizvod_a = (const struct Proizvod*)a;
-    const struct Proizvod* proizvod_b = (const struct Proizvod*)b;
-
-    return strcmp(proizvod_a->naziv, proizvod_b->naziv);
+void sortiraj_po_imenu() {
+	for (int i = 0; i < broj_proizvoda - 1; i++) {
+		for (int j = 0; j < broj_proizvoda - i - 1; j++) {
+			if (strcmp(proizvodi[j].naziv, proizvodi[j + 1].naziv) > 0) {
+				struct Proizvod temp = proizvodi[j];
+				proizvodi[j] = proizvodi[j + 1];
+				proizvodi[j + 1] = temp;
+			}
+		}
+	}
 }
 
-void usporedi_po_sku(const void* a, const void* b) {
-    const struct Proizvod* proizvod_a = (const struct Proizvod*)a;
-    const struct Proizvod* proizvod_b = (const struct Proizvod*)b;
-
-    return proizvod_a->sku - proizvod_b->sku;
+void sortiraj_po_sku() {
+	for (int i = 0; i < broj_proizvoda - 1; i++) {
+		for (int j = 0; j < broj_proizvoda - i - 1; j++) {
+			if (proizvodi[j].sku > proizvodi[j + 1].sku) {
+				struct Proizvod temp = proizvodi[j];
+				proizvodi[j] = proizvodi[j + 1];
+				proizvodi[j + 1] = temp;
+			}
+		}
+	}
 }
+
+
